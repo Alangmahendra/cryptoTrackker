@@ -1,0 +1,2 @@
+        <input type='text' placeholder='your crypto currency name' name='cryptoCoin' value={this.state.cryptoCoin} onChange={this.handleOnchange} />
+        <input type='text' placeholder='your currency' name='currency' value={this.state.currency} onChange={this.handleOnchange} />
