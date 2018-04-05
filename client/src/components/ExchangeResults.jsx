@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class Results extends Component {
+export class Results extends Component {
   render() {
     const loader = {
       "border": " 16px solid #f3f3f3",

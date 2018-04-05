@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ExchangeAction } from '../actions/ExchangeAction'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Reuslts from './ExchangeResults'
+import {Results} from './ExchangeResults'
 
 class Exchange extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class Exchange extends Component {
         </select>
         <button onClick={this.toogleConvert}>convert</button>
           <div>
-            <Reuslts isLoading={this.props.exchange.isLoading} isError={this.props.exchange.isError} exchangeSuccess={this.props.exchange.exchangeSuccess}/>
+            <Results isLoading={this.props.exchange.isLoading} isError={this.props.exchange.isError} exchangeSuccess={this.props.exchange.exchangeSuccess}/>
           </div>
       </div>
     )
