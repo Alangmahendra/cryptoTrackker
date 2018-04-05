@@ -5,8 +5,8 @@ export function ExchangeAction (coinQuantity,cryptoCoin,currency){
     dispatch(loading())
     axios.get(`https://min-api.cryptocompare.com/data/price?fsym=${cryptoCoin}&tsyms=${currency}`)
     .then(({data})=>{
-      const result = data.USD * coinQuantity
-      console.log('data',data.USD)
+      const result = data[currency] * coinQuantity
+      console.log('data',data)
       console.log('rresult',result)
       dispatch(success(result))
     })
@@ -14,19 +14,19 @@ export function ExchangeAction (coinQuantity,cryptoCoin,currency){
   }
 }
 
-function loading(){
+export function loading(){
   return {
     type:'LOADING'
   }
 }
 
-function error(){
+export function error(){
   return {
     type:'ERROR'
   }
 }
 
-function success(payload){
+export function success(payload){
   return {
     type:'SUCCESS',
     payload

@@ -4,7 +4,7 @@ const initialState = {
   exchangeSuccess: {}
 }
 
-export default function exchange(state = { ...initialState }, action) {
+export default function exchange(state = initialState, action) {
   switch (action.type) {
     case 'LOADING':
       return ({
@@ -25,7 +25,7 @@ export default function exchange(state = { ...initialState }, action) {
         exchangeSuccess: action.payload
       })
     default:
-      state
+     return state
   }
 }
 

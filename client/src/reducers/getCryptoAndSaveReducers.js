@@ -4,7 +4,7 @@ let initialState = {
   getDataSuccess : {}
 }
 
-function getAndSave (state={...initialState},action){
+function getAndSave (state=initialState,action){
   switch (action.type) {
     case 'LOADING':
       return ({

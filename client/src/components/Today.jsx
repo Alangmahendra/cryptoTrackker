@@ -35,7 +35,6 @@ class Today extends Component {
               1 litecoin : {response.LTC} ||
               1 ETH : {response.ETH}
             {console.log('ini state', response)}
-            {/* {console.log('bentuk data',this.state.message[this.state.message.length -1])} */}
           </p>
           : <p>Loading...
             {console.log('ini state', response)}

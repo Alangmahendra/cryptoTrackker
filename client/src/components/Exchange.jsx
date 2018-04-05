@@ -2,16 +2,15 @@ import React, { Component } from 'react'
 import { ExchangeAction } from '../actions/ExchangeAction'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Reuslts from './ExchangeResults'
 
 class Exchange extends Component {
   constructor(props) {
     super(props)
     this.state = {
       coinQuantity: '',
-      currency: '',
-      cryptoCoin: '',
-      cryptoCurrencyTypeSelected: 'LTC',
-      currencyTypeSelected: 'IDR',
+      cryptoCurrencyTypeSelected: 'BTC',
+      currencyTypeSelected: 'USD',
       cryptoCoinType: [
         { name: 'BITCOIN', code: 'BTC' },
         { name: 'LITECOIN', code: 'LTC' },
@@ -30,8 +29,7 @@ class Exchange extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
-    this.props.ExchangeAction(this.state.coinQuantity, this.state.cryptoCoinType, this.state.currencyTypeSelected)
+    
   }
 
   handleOnchange = (e) => {
@@ -40,69 +38,42 @@ class Exchange extends Component {
     })
   }
 
-  renderResults() {
-    const loader = {
-      "border": " 16px solid #f3f3f3",
-      "borderTop": " 16px solid #adad85",
-      "borderRadius": "50%",
-      "width": "120px",
-      "height": "120px",
-      "animation": "spin 2s linear infinite"
-    }
-
-    if (this.props.exchange.isLoading) {
-      return (
-        <center>
-          <div style={loader} />
-        </center>
-      )
-    } else if (this.props.exchange.isError) {
-      return (
-        <center>
-          <h1>ERROR!!!!! NOT valid structure</h1>
-        </center>
-      )
-    }
-    else {
-      return (
-        <h1>{this.props.exchange.exchangeSuccess}</h1>
-      )
-    }
+  toogleConvert = () => {
+   this.props.ExchangeAction(this.state.coinQuantity, this.state.cryptoCurrencyTypeSelected, this.state.currencyTypeSelected)
   }
 
   render() {
-    const { cryptoCoinType, currencyType, coinQuantity, cryptoCurrencyTypeSelected, currencyTypeSelected,cryptoCoin,currency } = this.state
+    const { cryptoCoinType, currencyType, coinQuantity, cryptoCurrencyTypeSelected, currencyTypeSelected } = this.state
+    
     return (
       <div>
-        <input type='number' placeholder='insert your crypto currency quantity ' name='coinQuantity' value={coinQuantity} onChange={this.handleOnchange} />
-        <select name='cryptoCoin'>
+        <input type='number' placeholder='insert your crypto currency quantity ' name="coinQuantity" value={coinQuantity} onChange={this.handleOnchange} />
+        
+        <select name="cryptoCurrencyTypeSelected" onChange={this.handleOnchange} value={cryptoCurrencyTypeSelected}>
 
           {
             cryptoCoinType.map(coin => (
-              <option value={coin.code} selected={cryptoCurrencyTypeSelected === coin.code}  key={coin.code}>{coin.name}</option>)
+              <option value={coin.code} key={coin.code}>{coin.name}</option>)
             )
           }
 
         </select>
-        <select name="currency">
+        <select name="currencyTypeSelected" onChange={this.handleOnchange} value={currencyTypeSelected}>
           {
             currencyType.map(currency => (
-            <option value={currency.code} selected={currencyTypeSelected === currency.code} key={currency.code}>{currency.name}</option>)
+            <option value={currency.code} key={currency.code}>{currency.name}</option>)
           )
           }
         </select>
-        <button onClick={this.props.ExchangeAction(coinQuantity,cryptoCurrencyTypeSelected,currencyType)}>convert</button>
-        <div>
-          {
-            this.renderResults
-          }
-        </div>
+        <button onClick={this.toogleConvert}>convert</button>
+          <div>
+            <Reuslts isLoading={this.props.exchange.isLoading} isError={this.props.exchange.isError} exchangeSuccess={this.props.exchange.exchangeSuccess}/>
+          </div>
       </div>
     )
   }
 }
 const mapStateToProps = (state) => {
-  console.log('ini prpops di mapstate', this.props)
   console.log('ini state', state.exchange)
   return {
     exchange: state.exchange
