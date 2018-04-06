@@ -1,7 +1,7 @@
 const initialState = {
   isLoading: false,
   isError: false,
-  exchangeSuccess: {}
+  exchangeSuccess: null
 }
 
 export default function exchange(state = initialState, action) {

@@ -29,7 +29,7 @@ const io = socketIo(server)
 const getPrice = async socket => {
   try {
     const res = await Model.find({})
-    // console.log('ini res',res[res.length-1])
+    // console.log('ini res',res[res.length-1].createdAt) 
      socket.emit('BTCFromAPI',res)
   }
   catch(error){

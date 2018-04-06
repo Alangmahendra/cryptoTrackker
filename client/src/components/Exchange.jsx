@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ExchangeAction } from '../actions/ExchangeAction'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {Results} from './ExchangeResults'
+import { Results } from './ExchangeResults'
 
 class Exchange extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class Exchange extends Component {
   }
 
   componentDidMount() {
-    
+    console.log('ini props', this.props.exchange)
   }
 
   handleOnchange = (e) => {
@@ -39,16 +39,18 @@ class Exchange extends Component {
   }
 
   toogleConvert = () => {
-   this.props.ExchangeAction(this.state.coinQuantity, this.state.cryptoCurrencyTypeSelected, this.state.currencyTypeSelected)
+    this.props.ExchangeAction(this.state.coinQuantity, this.state.cryptoCurrencyTypeSelected, this.state.currencyTypeSelected)
   }
 
   render() {
     const { cryptoCoinType, currencyType, coinQuantity, cryptoCurrencyTypeSelected, currencyTypeSelected } = this.state
-    
+
+    const { isLoading, exchangeSuccess, isError } = this.props.exchange
+
     return (
       <div>
         <input type='number' placeholder='insert your crypto currency quantity ' name="coinQuantity" value={coinQuantity} onChange={this.handleOnchange} />
-        
+
         <select name="cryptoCurrencyTypeSelected" onChange={this.handleOnchange} value={cryptoCurrencyTypeSelected}>
 
           {
@@ -61,20 +63,20 @@ class Exchange extends Component {
         <select name="currencyTypeSelected" onChange={this.handleOnchange} value={currencyTypeSelected}>
           {
             currencyType.map(currency => (
-            <option value={currency.code} key={currency.code}>{currency.name}</option>)
-          )
+              <option value={currency.code} key={currency.code}>{currency.name}</option>)
+            )
           }
         </select>
         <button onClick={this.toogleConvert}>convert</button>
-          <div>
-            <Results isLoading={this.props.exchange.isLoading} isError={this.props.exchange.isError} exchangeSuccess={this.props.exchange.exchangeSuccess}/>
-          </div>
-      </div>
+        <div>
+          <Results isLoading={isLoading} isError={isError} exchangeSuccess={exchangeSuccess} />
+        </div>
+      </div>  
     )
   }
 }
 const mapStateToProps = (state) => {
-  console.log('ini state', state.exchange)
+  console.log('ini state.exchange', state.exchange)
   return {
     exchange: state.exchange
   }

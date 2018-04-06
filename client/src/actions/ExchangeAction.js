@@ -5,10 +5,10 @@ export function ExchangeAction (coinQuantity,cryptoCoin,currency){
     dispatch(loading())
     axios.get(`https://min-api.cryptocompare.com/data/price?fsym=${cryptoCoin}&tsyms=${currency}`)
     .then(({data})=>{
-      const result = data[currency] * coinQuantity
+      const result = Number(data[currency]) * Number(coinQuantity)
       console.log('data',data)
       console.log('rresult',result)
-      dispatch(success(result))
+      dispatch(success(Math.round(result)))
     })
     .catch(err => dispatch(error()))
   }

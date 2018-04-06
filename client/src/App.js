@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import store from './store/store'
 import Today from './components/Today'
 import Exchange from './components/Exchange'
+// import HistoryDay from './components/HistoryDay'
 
 class App extends Component {
   render() {
@@ -21,11 +22,20 @@ class App extends Component {
               <Link to={'/today'}>
                 <button>TODAY</button>
               </Link>
+
               <Link to={'/exchange'}>
                 <button>EXCHANGE</button>
               </Link>
+
+              {/* <Link to={'/history'}>
+                <button>HISTORY</button>
+              </Link> */}
+
               <Route exact path='/today' component={Today} />
+
               <Route exact path='/exchange' component={Exchange} />
+
+              {/* <Route exact path='/history' component={HistoryDay} /> */}
             </div>
           </BrowserRouter>
         </div>
