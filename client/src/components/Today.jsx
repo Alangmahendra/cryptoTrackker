@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Line } from 'react-chartjs-2'
 import Notification from './Notification'
+import Notif from './Notification2'
 
 
 class Today extends Component {
@@ -12,7 +13,10 @@ class Today extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "http://127.0.0.1:5000"
+      endpoint: "http://127.0.0.1:5000",
+      pricesLimitBTC: null,
+      pricesLimitLTC: null,
+      pricesLimitETH: null
     };
   }
 
@@ -24,9 +28,32 @@ class Today extends Component {
     const socket = socketIOClient(endpoint);
     console.log('ini state di didmount', this.state)
     socket.on("BTCFromAPI", data => {
-      this.setState({ response: data[data.length - 1], AllHistory: data })
+      this.setState({ response: data[data.length - 1], AllHistory: data },()=>{
+        const { response, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
+
+      console.log(Number(response.BTC) , Number(pricesLimitBTC),Number(response.BTC) >= Number(pricesLimitBTC))
+
+        if(pricesLimitBTC){
+          if((Number(response.BTC) >= Number(pricesLimitBTC))){
+            console.log(Number(response.BTC) , Number(pricesLimitBTC),Number(response.BTC) >= Number(pricesLimitBTC))
+            console.log('lebih atau sama dengan')
+            
+          }else {
+            console.log('kurang dari limit')
+          }
+        }else{
+          console.log('masih kosong')
+        }
+      })
     })
 
+  }
+
+  handleOnchange = (e) => {
+    console.log('handle on change')
+    this.setState({
+      [e.target.name]: e.target.value
+    })
   }
 
 
@@ -63,10 +90,8 @@ class Today extends Component {
 
 
   render() {
-    console.log(this.state.message)
-    const { response, AllHistory } = this.state
-    // console.log(AllHistory ? AllHistory.length : 0);
-
+    // console.log(this.state.message)
+    const { response, AllHistory, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
 
     const loader = {
       "border": " 16px solid #f3f3f3",
@@ -81,30 +106,32 @@ class Today extends Component {
       <div>
         <div style={{ textAlign: "center" }}>
           {response
-            ? <p>
-              1 bitcoin : {response.BTC} ||
-              1 litecoin : {response.LTC} ||
-              1 ETH : {response.ETH}
-              {console.log('ini state', response)}
-            </p>
+            ? <div>
+              <p>
+                1 bitcoin : {response.BTC} ||
+                1 litecoin : {response.LTC} ||
+                1 ETH : {response.ETH}
+              </p>
+            </div>
             : <center>
-              <p style={loader}></p>
+              <p>ssssttt theres an a loading bellow</p>
             </center>
           }
         </div>
+
         <div>
           {
             AllHistory
               ? <div>
                 {['BTC', 'LTC', 'ETH'].map(crypto => (
-                  <div>
+                  <div key={crypto}>
                     <h1>
                       {(crypto === 'BTC') ? 'Bitcoin' : (crypto === 'ETH') ? 'Etherium' : 'Litecoin'}
                     </h1>
                     <Line
                       data={this.LineChart(crypto)}
                     />
-                    <br /><br /><br />
+                    <br />
                   </div>
                 ))}
               </div>
@@ -114,7 +141,16 @@ class Today extends Component {
           }
         </div>
         <div>
-          <Notification />
+          <h1>set limit for prices</h1>
+          <div>
+            <input placeholder="BTC" type="number" name="pricesLimitBTC" value={pricesLimitBTC} onChange={this.handleOnchange} />
+            {/* {console.log('btc', pricesLimitBTC)} */}
+
+            <input placeholder="LTC" type="number" name="pricesLimitLTC" value={pricesLimitLTC} onChange={this.handleOnchange} />
+
+            <input placeholder="ETH" type="number" name="pricesLimitETH" value={pricesLimitETH} onChange={this.handleOnchange} />
+            <Notif/> <Notification/>
+          </div>
         </div>
       </div>
     );

@@ -58,16 +58,16 @@ export default class Notification extends Component {
 
     const now = Date.now();
 
-    const title = 'React-Web-Notification' + now;
+    const title = 'Reach prices limit';
     const body = 'Hello' + new Date();
     const tag = now;
-    
+
     const options = {
       tag: tag,
       body: body,
       lang: 'en',
       dir: 'ltr',
-      sound: './src/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
+      sound: './src/sound.mp3'
     }
     this.setState({
       title: title,

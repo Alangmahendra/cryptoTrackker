@@ -39,7 +39,7 @@ const getPrice = async socket => {
 
 
 io.on('connection', socket => {
-  console.log('connected io'), setInterval(() => getPrice(socket), 10000)
+  console.log('connected io'), setInterval(() => getPrice(socket), 6000)
   socket.on('disconnect', () => {
     console.log('disconnected io');
   })
