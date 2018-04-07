@@ -6,8 +6,12 @@ export default class Notification extends Component {
     super(props);
     this.state = {
       ignore: true,
-      title: ''
+      title: null
     };
+  }
+
+  componentDidMount(){
+   this.handleButtonClick()
   }
 
   handlePermissionGranted(){
@@ -79,9 +83,9 @@ export default class Notification extends Component {
 
     return (
       <div>
-        <button onClick={this.handleButtonClick.bind(this)}>Notif!</button>
+        
         <Notify
-          ignore={this.state.ignore && this.state.title !== ''}
+          ignore={true}
           notSupported={this.handleNotSupported.bind(this)}
           onPermissionGranted={this.handlePermissionGranted.bind(this)}
           onPermissionDenied={this.handlePermissionDenied.bind(this)}

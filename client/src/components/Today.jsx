@@ -4,9 +4,9 @@ import { getAndSaveAction } from '../actions/getAndSaveAction'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Line } from 'react-chartjs-2'
-import Notification from './Notification'
-import Notif from './Notification2'
+import Push from 'push.js'
 
+Push.Permission.GRANTED
 
 class Today extends Component {
   constructor() {
@@ -28,21 +28,41 @@ class Today extends Component {
     const socket = socketIOClient(endpoint);
     console.log('ini state di didmount', this.state)
     socket.on("BTCFromAPI", data => {
-      this.setState({ response: data[data.length - 1], AllHistory: data },()=>{
+      this.setState({ response: data[data.length - 1], AllHistory: data }, () => {
         const { response, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
 
-      console.log(Number(response.BTC) , Number(pricesLimitBTC),Number(response.BTC) >= Number(pricesLimitBTC))
-
-        if(pricesLimitBTC){
-          if((Number(response.BTC) >= Number(pricesLimitBTC))){
-            console.log(Number(response.BTC) , Number(pricesLimitBTC),Number(response.BTC) >= Number(pricesLimitBTC))
-            console.log('lebih atau sama dengan')
-            
-          }else {
-            console.log('kurang dari limit')
+        if (pricesLimitBTC || pricesLimitETH || pricesLimitLTC) {
+          if ((Number(response.BTC) >= Number(pricesLimitBTC))) {
+            Push.create('has reach limit', {
+              body: "from BITCOIN limit",
+              timeout: 4000,
+              onClick: function () {
+                window.focus();
+                this.close();
+              }
+            })
+          } else if((Number(response.LTC) >= Number(pricesLimitLTC))){
+            Push.create('has reach limit', {
+              body: "from LITECOIN limit",
+              timeout: 4000,
+              onClick: function () {
+                window.focus();
+                this.close();
+              }
+            })
           }
-        }else{
-          console.log('masih kosong')
+           else if((Number(response.ETH) >= Number(pricesLimitETH))){
+            Push.create('has reach limit', {
+              body: "from ETHERIUM limit",
+              timeout: 4000,
+              onClick: function () {
+                window.focus();
+                this.close();
+              }
+            })
+          }
+        } else{
+          console.log('semua field masih kosong')
         }
       })
     })
@@ -149,7 +169,7 @@ class Today extends Component {
             <input placeholder="LTC" type="number" name="pricesLimitLTC" value={pricesLimitLTC} onChange={this.handleOnchange} />
 
             <input placeholder="ETH" type="number" name="pricesLimitETH" value={pricesLimitETH} onChange={this.handleOnchange} />
-            <Notif/> <Notification/>
+            {/* <Notification/> */}
           </div>
         </div>
       </div>
