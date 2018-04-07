@@ -4,7 +4,7 @@ import { getAndSaveAction } from '../actions/getAndSaveAction'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Line } from 'react-chartjs-2'
-
+import Notification from './Notification'
 
 
 class Today extends Component {
@@ -17,24 +17,24 @@ class Today extends Component {
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
     console.log(this.props)
     this.props.getAndSaveAction()
     const { endpoint } = this.state;
     const socket = socketIOClient(endpoint);
     console.log('ini state di didmount', this.state)
     socket.on("BTCFromAPI", data => {
-      this.setState({ response: data[data.length - 1],AllHistory:data })
+      this.setState({ response: data[data.length - 1], AllHistory: data })
     })
 
   }
 
 
-  LineChart = (coin) =>{
+  LineChart = (coin) => {
     const { AllHistory } = this.state;
-    let Label = (coin==='BTC')?'Bitcoin':(coin==='ETH')?'Etherium':'Litecoin'
+    let Label = (coin === 'BTC') ? 'Bitcoin' : (coin === 'ETH') ? 'Etherium' : 'Litecoin'
     return {
-      labels: AllHistory.map(e=>e.createdAt),
+      labels: AllHistory.map(e => e.createdAt),
       datasets: [
         {
           label: Label,
@@ -55,7 +55,7 @@ class Today extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: AllHistory.map(e=>e[coin])
+          data: AllHistory.map(e => e[coin])
         }
       ]
     }
@@ -64,9 +64,19 @@ class Today extends Component {
 
   render() {
     console.log(this.state.message)
-    const { response, AllHistory } = this.state;
-    console.log(AllHistory?AllHistory.length:0);
-   
+    const { response, AllHistory } = this.state
+    // console.log(AllHistory ? AllHistory.length : 0);
+
+
+    const loader = {
+      "border": " 16px solid #f3f3f3",
+      "borderTop": " 16px solid #adad85",
+      "borderRadius": "50%",
+      "width": "120px",
+      "height": "120px",
+      "animation": "spin 2s linear infinite"
+    }
+
     return (
       <div>
         <div style={{ textAlign: "center" }}>
@@ -77,33 +87,34 @@ class Today extends Component {
               1 ETH : {response.ETH}
               {console.log('ini state', response)}
             </p>
-            : <p>Loading...
-            {console.log('ini state di loading', response)}
-            </p>}
+            : <center>
+              <p style={loader}></p>
+            </center>
+          }
         </div>
         <div>
           {
             AllHistory
               ? <div>
-                  {['BTC','LTC','ETH'].map(crypto=>(
-                    <div>
-                      <h1>
-                        {(crypto==='BTC')?'Bitcoin':(crypto==='ETH')?'Etherium':'Litecoin'}
-                      </h1>
+                {['BTC', 'LTC', 'ETH'].map(crypto => (
+                  <div>
+                    <h1>
+                      {(crypto === 'BTC') ? 'Bitcoin' : (crypto === 'ETH') ? 'Etherium' : 'Litecoin'}
+                    </h1>
                     <Line
                       data={this.LineChart(crypto)}
                     />
-                    <br/><br/><br/>
-                    </div>
-                  ))}
-                  
-                  {/* {console.log('mapping btc',AllHistory.map(coin=>coin.BTC))} */}
+                    <br /><br /><br />
+                  </div>
+                ))}
               </div>
-              : <p>
-                LOADING....
-              {console.log('ini state BtcHistory di loading', AllHistory)}
-              </p>
+              : <center>
+                <p style={loader}></p>
+              </center>
           }
+        </div>
+        <div>
+          <Notification />
         </div>
       </div>
     );
@@ -121,4 +132,5 @@ const mapDispatchToProps = (dispatch) => {
     getAndSaveAction,
   }, dispatch)
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Today)
