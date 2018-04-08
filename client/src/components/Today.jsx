@@ -14,9 +14,9 @@ class Today extends Component {
     this.state = {
       response: false,
       endpoint: "http://127.0.0.1:5000",
-      pricesLimitBTC: null,
-      pricesLimitLTC: null,
-      pricesLimitETH: null
+      pricesLimitBTC: '',
+      pricesLimitLTC: '',
+      pricesLimitETH: ''
     };
   }
 
@@ -31,7 +31,7 @@ class Today extends Component {
       this.setState({ response: data[data.length - 1], AllHistory: data }, () => {
         const { response, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
 
-        if (pricesLimitBTC || pricesLimitETH || pricesLimitLTC) {
+        if (pricesLimitBTC) {
           if ((Number(response.BTC) >= Number(pricesLimitBTC))) {
             Push.create('has reach limit', {
               body: "from BITCOIN limit",
@@ -41,7 +41,15 @@ class Today extends Component {
                 this.close();
               }
             })
-          } else if((Number(response.LTC) >= Number(pricesLimitLTC))){
+          } else {
+            console.log('field BTC kosong')
+          }
+        } else {
+          console.log('patokan masih kosong')
+        }
+
+        if (pricesLimitLTC) {
+          if ((Number(response.LTC) >= Number(pricesLimitLTC))) {
             Push.create('has reach limit', {
               body: "from LITECOIN limit",
               timeout: 4000,
@@ -50,8 +58,15 @@ class Today extends Component {
                 this.close();
               }
             })
+          } else {
+            console.log('patokan LTC kosong')
           }
-           else if((Number(response.ETH) >= Number(pricesLimitETH))){
+        } else {
+          console.log('patokan kosong')
+        }
+
+        if (pricesLimitETH) {
+          if ((Number(response.ETH) >= Number(pricesLimitETH))) {
             Push.create('has reach limit', {
               body: "from ETHERIUM limit",
               timeout: 4000,
@@ -60,9 +75,11 @@ class Today extends Component {
                 this.close();
               }
             })
+          } else {
+            console.log('patokan ETH kosong')
           }
-        } else{
-          console.log('semua field masih kosong')
+        } else {
+          console.log('patokan kosong')
         }
       })
     })
