@@ -13,13 +13,12 @@ class Today extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "http://127.0.0.1:5000",
+      endpoint: "http://localhost:4000",
       pricesLimitBTC: '',
       pricesLimitLTC: '',
       pricesLimitETH: ''
     };
   }
-
 
   componentWillMount() {
     console.log(this.props)
@@ -145,9 +144,9 @@ class Today extends Component {
           {response
             ? <div>
               <p>
-                1 bitcoin : {response.BTC} ||
-                1 litecoin : {response.LTC} ||
-                1 ETH : {response.ETH}
+                1 BTC : ${response.BTC} ||
+                1 LTC : ${response.LTC} ||
+                1 ETH : ${response.ETH}
               </p>
             </div>
             : <center>

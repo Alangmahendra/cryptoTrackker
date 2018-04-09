@@ -19,6 +19,11 @@ class App extends Component {
           </header>
           <BrowserRouter>
             <div>
+
+              <Link to={'/'}>
+                <button>HOME</button>
+              </Link>
+
               <Link to={'/today'}>
                 <button>TODAY</button>
               </Link>
@@ -30,7 +35,7 @@ class App extends Component {
               {/* <Link to={'/history'}>
                 <button>HISTORY</button>
               </Link> */}
-
+              <Route exact path='/'/>
               <Route exact path='/today' component={Today} />
 
               <Route exact path='/exchange' component={Exchange} />

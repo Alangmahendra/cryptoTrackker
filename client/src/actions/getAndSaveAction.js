@@ -3,7 +3,7 @@ import axios from 'axios'
 export function getAndSaveAction (){
   return dispatch => {
     dispatch(Loading())
-    axios.get('http://localhost:5000/crypto')
+    axios.get('http://localhost:4000/crypto')
     .then(({data})=>{
       dispatch(Success(data.data))
     })
