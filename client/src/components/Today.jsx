@@ -16,18 +16,20 @@ class Today extends Component {
       endpoint: "http://localhost:4000",
       pricesLimitBTC: '',
       pricesLimitLTC: '',
-      pricesLimitETH: ''
+      pricesLimitETH: '',
+      dataOffline:''
     };
   }
 
   componentWillMount() {
     console.log(this.props)
     this.props.getAndSaveAction()
-    const { endpoint } = this.state;
+    const { endpoint,response,dataOffline } = this.state;
     const socket = socketIOClient(endpoint);
     console.log('ini state di didmount', this.state)
     socket.on("BTCFromAPI", data => {
-      this.setState({ response: data[data.length - 1], AllHistory: data }, () => {
+        this.setState({ response: data[data.length - 1], AllHistory: data,dataOffline:data[data.length - 1]}
+        , () => {
         const { response, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
 
         if (pricesLimitBTC) {
@@ -81,8 +83,11 @@ class Today extends Component {
           console.log('patokan kosong')
         }
       })
+      
     })
-
+    if(!navigator.onLine){
+      this.setState({response:localStorage.getItem('Coinoffline')})
+    }
   }
 
   handleOnchange = (e) => {
@@ -127,7 +132,8 @@ class Today extends Component {
 
   render() {
     // console.log(this.state.message)
-    const { response, AllHistory, pricesLimitBTC, pricesLimitETH, pricesLimitLTC } = this.state
+    const { response, AllHistory, pricesLimitBTC, pricesLimitETH, pricesLimitLTC,dataOffline } = this.state
+    localStorage.setItem('Coinoffline',dataOffline)
 
     const loader = {
       "border": " 16px solid #f3f3f3",
